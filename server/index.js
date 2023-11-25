@@ -5,6 +5,7 @@ const sellRouter = require("./Controller/router2");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const path = require("path");
 
 mongoose.set("strictQuery", true);
 mongoose.connect(
@@ -30,8 +31,10 @@ app.use(cookieParser());
 app.use("/nexHome", nexHomeRouter);
 app.use("/sell", sellRouter);
 
-app.get("/", (req, res) => {
-  res.send("Welcome to NexHome!"); // You can customize this message
+app.use(express.static(path.join(__dirname, "/client/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
 app.listen(4000, () => {
   console.log("started at 4000");
